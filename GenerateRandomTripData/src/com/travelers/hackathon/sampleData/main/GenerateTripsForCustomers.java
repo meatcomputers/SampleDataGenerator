@@ -49,10 +49,12 @@ public class GenerateTripsForCustomers {
 		saturdayDrive.setSampleTimeSeconds(SAMPLE_TIME_SECONDS);
 		saturdayDrive.setTotalSeconds(5 * 60);
 
-		FileWriter fw = new FileWriter("Data/DriverData_01.csv");
+//		FileWriter fw = new FileWriter("Data/DriverData_01.csv");
+		FileWriter fw = new FileWriter("Data/DriverData_01.json");
 		BufferedWriter bw = new BufferedWriter(fw);
-		bw.write("driverID, timestamp, velocity\n");
-
+//		bw.write("driverID, timestamp, velocity\n");
+		bw.write("data: {[\n");
+		
 		for (int j = 0; j < 4; j++) {
 			for (int i = 0; i < 5; i++) {
 				tripDate.set(Calendar.HOUR, 8);
@@ -75,6 +77,8 @@ public class GenerateTripsForCustomers {
 
 		}
 
+		bw.write("]}\n");
+
 	}
 
 	public static final DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
@@ -88,7 +92,10 @@ public class GenerateTripsForCustomers {
 		Date currentTime = trip.getStartTime();
 		for (float tripPoint : tripPoints) {
 			currentTime = new Date(currentTime.getTime() + 1000 * trip.getSampleTimeSeconds());
-			bw.write(profile.getDriverId() + ", " + dateFormat.format(currentTime) + ", " + tripPoint + "\n");
+//			bw.write(profile.getDriverId() + ", " + dateFormat.format(currentTime) + ", " + tripPoint + "\n");
+			bw.write("{ id: " + profile.getDriverId() 
+				+ ", timestamp: " + dateFormat.format(currentTime) 
+				+ ", velocity: " + tripPoint + " }, \n");
 		}
 
 	}
